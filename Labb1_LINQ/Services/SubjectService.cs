@@ -17,8 +17,14 @@ namespace Labb1_LINQ.Services
             ShowAllSubjects(db);
             Console.WriteLine("Var god mata in namnet på den kurs du vill få mer info om");
 
-            string option = Console.ReadLine();
-
+            string option = Console.ReadLine()?.Trim();
+            if (string.IsNullOrEmpty(option))
+            {
+                Console.WriteLine("Du måste skriva in någonting");
+                Console.ReadKey();
+                Console.Clear();
+                return;
+            }
             var findSubject = db.Subjects
                                 .Where(s => s.SubjectName
                                 .Contains(option))
@@ -58,8 +64,9 @@ namespace Labb1_LINQ.Services
                 
                 Console.Clear();
                 Console.WriteLine("Vad vill du döpa om kursen till?");
-                string updatedName = Console.ReadLine(); 
-                //updateObject.SubjectName = updatedName;
+                string updatedName = Console.ReadLine();
+                updateObject.SubjectName = updatedName;
+                db.SaveChanges();
                 Console.WriteLine($"Kursen har bytt namn till {updatedName}   \nTryck på valfri tagent för att se den uppdaterade listan av kurser");
                 Console.ReadKey();
                 ShowAllSubjects(db);
